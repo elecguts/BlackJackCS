@@ -108,7 +108,7 @@ namespace BlackJackCS
             //}
             Console.WriteLine("Press any key to start the deal.");
             Console.ReadLine();
-
+            // Deals first the dealer, then the player, two cards
             dealerHand.Cards.Add(fullDeck[0]);
             fullDeck.RemoveAt(0);
             dealerHand.Cards.Add(fullDeck[0]);
@@ -150,10 +150,52 @@ namespace BlackJackCS
                 }
             }
             //check for bust
+            var playerBust = false;
+            var dealerBust = false;
+            if (player1Hand.HandValue() > 21)
+            {
+                Console.WriteLine("You busted!");
+                playerBust = true;
+            }
 
             //loop for dealer choices
+            else
+            {
+                if (dealerHand.HandValue() > 21)
+                {
+                    Console.WriteLine($"The dealer has {dealerHand.HandValue()} points and busted!");
+                    dealerBust = true;
+                }
+                else if (dealerHand.HandValue() < player1Hand.HandValue())
+                {
+                    while (dealerHand.HandValue() < 17)
+                    {
+                        Console.WriteLine($"The dealer's hand is at {dealerHand.HandValue()} points.");
+                        Console.WriteLine($"The dealer draws the {fullDeck[0].CardDisplay()}");
+                        dealerHand.Cards.Add(fullDeck[0]);
+                        fullDeck.RemoveAt(0);
+                    }
+                }
+            }
+            Console.WriteLine($"The dealer's hand is at {dealerHand.HandValue()} points.");
 
             //compare totals and check for winner
+            if (playerBust)
+            {
+                Console.WriteLine($"Your hand had {player1Hand.HandValue()} points and is a bust. You lose!");
+            }
+            else if (dealerBust)
+            {
+                Console.WriteLine($"The dealer hand had {dealerHand.HandValue()} points and was a bust. You win!");
+            }
+            else if (player1Hand.HandValue() > dealerHand.HandValue())
+            {
+                Console.WriteLine("Your hand beat the dealer's hand. You win!");
+            }
+            else if (player1Hand.HandValue() <= dealerHand.HandValue())
+            {
+                Console.WriteLine("The dealer hand beats yours. You lose!");
+            }
         }
     }
 }
